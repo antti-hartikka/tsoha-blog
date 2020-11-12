@@ -1,0 +1,22 @@
+<!doctype html>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+
+<title>tsoha-blog - {% block title %}{% endblock %}</title>
+<div class="container">
+    {% include "partials/navbar.html" %}
+    {% if session.username %}
+        <p>Olet kirjautunut nimellä {{ session.username }}, käyttäjäryhmäsi on {{ session.user_type }}</p>
+    {% else %}
+        {% include "partials/login.html" %}
+    {% endif %}
+    <hr>
+    {% block content %}
+    {% endblock %}
+    <hr>
+    <div class="row">
+        <div class="col">
+            Laita viesti asianomaiselle <a href="#">tästä</a>
+        </div>
+    </div>
+</div>

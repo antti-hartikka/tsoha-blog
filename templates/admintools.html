@@ -1,0 +1,28 @@
+<!doctype html>
+{% extends "layout.html" %}
+{% block title %}
+    ylläpitäjän työkalut
+{% endblock %}
+{% block content %}
+
+    <p>Tällä sivulla näet käyttäjiä koskevat tiedot ja voit muuttaa niitä.
+        Valitse ensin käyttäjä alla olevasta listasta:</p>
+
+    <br>
+
+    <form action="/get_user" method="POST">
+        <div class="form-group">
+            <label for="exampleFormControlSelect1">Käyttäjä:</label>
+            <select class="form-control" id="query" name="username">
+                {% for user in users %}
+                <option>{{ user[0] }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <br>
+        <input type="submit" value="Hae">
+    </form>
+
+    <br>
+
+{% endblock %}}

@@ -1,0 +1,19 @@
+<!doctype html>
+{% extends "layout.html" %}
+{% block title %}
+    tilin luonti
+{% endblock %}
+{% block content %}
+    <p>Tällä sivulla luot uuden käyttäjän</p>
+    <form action="/create_account" method="POST">
+        Anna käyttäjänimesi:
+        <br>
+        <input type="text" name="username">
+        <br>
+        Anna salasanasi:
+        <br>
+        <input type="password" name="password">
+        <br>
+        <input type="submit" value="Rekisteröidy">
+    </form>
+{% endblock %}}
