@@ -19,3 +19,17 @@ Käyttäjiä on neljässä kategoriassa:
   * Edellisten lisäksi voi muokata tai poistaa muiden tekemää sisältöä.
   * Muokata käyttäjien tietoja tai poistaa käyttäjän.
   * Voi poistaa kommentteja
+  
+  
+  ----------
+
+
+Sovellusta voi testata osoitteessa https://pure-shelf-99302.herokuapp.com/.
+Sovelluksen sivut ovat "hieman" vaiheessa, sovellukseen pystyy kuitenkin mm. kirjautumaan sisään ja tarkastelemaan erilaisia näkymiä eri käyttäjäryhmien näkökulmasta.
+
+Näkymät sovelluksen käyttäjäryhmiin saa seuraavilla testikäyttäjätunnuksilla:
+* admin g6LEWTkMpnL7hP
+* perus 624v9sGWG84sjg
+* luoja p4srDNiimn46J3
+
+Koodi on tällä hetkellä jäsennelty huonosti ja tavoitteena onkin refaktorointi ensi viikolla.
