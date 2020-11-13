@@ -20,7 +20,7 @@
         {% endif %}
          {% if session.user_type %}
             <li class="nav-item">
-                <a class="nav-link" href="/account">tilisi tiedot</a>
+                <a class="nav-link" href="/account/{{ session.username }}">tilisi tiedot</a>
             </li>
         {% endif %}
         {% if session.user_type == "admin" %}
