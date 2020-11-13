@@ -55,4 +55,4 @@ def get_user_list():
 
 
 def get_posts(string):
-    return None
+    return "posts"
