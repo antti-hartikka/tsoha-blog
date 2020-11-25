@@ -11,6 +11,10 @@
         {% include "partials/login.html" %}
     {% endif %}
     <hr>
+    {% if msg is defined and msg != "ok" %}
+        <p>Virhe: {{ error }}</p>
+        <hr>
+    {% endif %}
     {% block content %}
     {% endblock %}
     <hr>

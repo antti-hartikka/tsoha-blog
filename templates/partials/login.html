@@ -9,5 +9,10 @@
         <div class="col">
             <button type="submit" class="btn btn-primary btn-sm">kirjaudu</button>
         </div>
+        {% if login == "error" %}
+        <div class="col">
+            <p>Väärä käyttäjätunnus tai salasana</p>
+        </div>
+        {% endif %}
     </div>
 </form>

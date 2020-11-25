@@ -2,16 +2,8 @@ CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username TEXT,
     password TEXT,
-    user_type TEXT -- basic, approved, admin
-);
-
-CREATE TABLE content(
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users,
-    media_text TEXT,
-    media_path TEXT,
-    media_type TEXT,  -- text, image, video
-    order_number INTEGER
+    user_group TEXT, -- basic, approved, admin
+    is_active BOOLEAN
 );
 
 CREATE TABLE posts (
@@ -20,7 +12,20 @@ CREATE TABLE posts (
     post_type TEXT,  -- short, long, private
     title TEXT,
     date_created DATE,
-    date_modified DATE
+    is_visible BOOLEAN
+);
+
+CREATE TABLE images (
+    id SERIAL PRIMARY KEY,
+    name TEXT,
+    data BYTEA);
+
+CREATE TABLE content(
+    id SERIAL PRIMARY KEY,
+    image_id INTEGER REFERENCES images,
+    media_text TEXT,
+    media_type TEXT,  -- text, image
+    order_number INTEGER
 );
 
 CREATE TABLE postcontent (

@@ -1,21 +1,13 @@
 <!doctype html>
 {% extends "layout.html" %}
 {% block content %}
-<div class="row">
-    <div class="col-4">
-        <h2>Tässä voisi olla kuva 1</h2>
-        <p>
-            Ja tässä voisi olla siihen sisältöä.
-    </div>
-    <div class="col-4">
-        <h2>Tässä voisi olla kuva 2</h2>
-        <p>
-            Ja tässä taas vastaavaa sisältöä.
-    </div>
-    <div class="col-4">
-        <h2>Tässä voisi olla kuva 3</h2>
-        <p>
-            Tästä vielä kolmanteen kuvaan sisältö.
-    </div>
-</div>
+    {% for row in posts %}
+        <div class="row">
+            {% for post in row %}
+                <div class="col-4">
+                    <img src="/show/{{ post[0] }}" class="img-fluid" alt="{{ post[1] }} ">
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
 {% endblock %}

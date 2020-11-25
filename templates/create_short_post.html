@@ -4,32 +4,33 @@
     sisällön luonti
 {% endblock %}
 {% block content %}
-    <p>Tällä sivulla luot uuden pitkän postauksen</p>
+    <p>Tällä sivulla luot uuden lyhyen postauksen</p>
     <br>
-    <form action="/create_long_post" method="POST">
+    <form action="/create_short" method="POST" enctype="multipart/form-data">
 
         Postaatko etusivulle vai yksityiseen?
 
         <div class="form-check">
-            <input class="form-check-input" type="radio" name="radio1" id="etusivu" value="etusivu">
+            <input class="form-check-input" type="radio" name="type" id="etusivu" value="short">
             <label class="form-check-label" for="etusivu">etusivu</label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="radio" name="radio1" id="yksityinen" value="yksityinen">
-            <label class="form-check-label" for="ykstyinen">yksityinen</label>
+            <input class="form-check-input" type="radio" name="type" id="yksityinen" value="private">
+            <label class="form-check-label" for="yksityinen">yksityinen</label>
         </div>
         <br>
         <div class="form-group">
-            <label for="file">Valitse kuva tai video:</label>
-            <input type="file" class="form-control-file" id="file">
+            <label for="file">Valitse kuva (max 500kb):</label>
+            <input type="file" class="form-control-file" id="file" name="file">
         </div>
 
         <div class="form-group">
             <label for="text">Vaihtoehtoinen kuvateksti:</label>
-            <input type="text" class="form-control" id="text">
+            <input type="text" class="form-control" id="text" name="alternative">
         </div>
 
-        <button type="submit">Luo postaus!</button>
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+        <button type="submit" class="btn btn-primary">Luo postaus</button>
 
     </form>
 {% endblock %}

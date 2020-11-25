@@ -4,15 +4,29 @@
     tilin luonti
 {% endblock %}
 {% block content %}
-    <p>Tällä sivulla luot uuden käyttäjän</p>
-    <form action="/create_account" method="POST">
+    <p>Tällä sivulla luot uuden käyttäjän. Käyttäjänimesi voi koostua kirjaimista a-z ja numeroista 0-9,
+        pituuden tulisi olla 3-20 merkkiä. Salasanassa on samanlainen rajoitus, mutta pituuden tulisi olla 10-30
+        merkkiä</p>
+    <form action="/signup" method="POST">
         Anna käyttäjänimesi:
         <br>
         <input type="text" name="username">
+
+        {% if error == "username taken" %}
+            <p>käyttäjänimi on jo käytössä</p>
+        {% elif error == "username not ok" %}
+            <p>käyttäjänimi on vääränmuotoinen</p>
+        {% endif %}
+
         <br>
         Anna salasanasi:
         <br>
         <input type="password" name="password">
+
+        {% if error == "password not ok" %}
+            <p>salasana on vääränmuotoinen</p>
+        {% endif %}
+
         <br>
         <input type="submit" value="Rekisteröidy">
     </form>

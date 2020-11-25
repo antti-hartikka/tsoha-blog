@@ -10,9 +10,9 @@
 
     <br>
 
-    <form action="/get_user" method="POST">
+    <form action="/admintools" method="POST">
         <div class="form-group">
-            <label for="exampleFormControlSelect1">Käyttäjä:</label>
+            <label for="query">Käyttäjä:</label>
             <select class="form-control" id="query" name="username">
                 {% for user in users %}
                 <option>{{ user[0] }}</option>
@@ -20,7 +20,7 @@
             </select>
         </div>
         <br>
-        <input type="submit" value="Hae">
+        <input type="submit" value="Siirry käyttäjän tietoihin">
     </form>
 
     <br>
