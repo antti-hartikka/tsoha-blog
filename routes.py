@@ -73,7 +73,7 @@ def account(username):
         return render_template("account.html", username=username, usergroup=user_type)
     else:
         if session["csrf_token"] != request.form["csrf_token"]:
-            return redirect("/logout")
+            return redirect("/logout", msg="csfr_token error")
 
         action = request.form["action"]
         result = "ok"
@@ -102,7 +102,7 @@ def create_long():
         return render_template("/create_long_post.html")
     else:
         if session["csrf_token"] != request.form["csrf_token"]:
-            return redirect("/logout")
+            return redirect("/logout", msg="csfr_token error")
 
         username = session["username"]
         title = request.form["title"]
@@ -157,7 +157,7 @@ def create_short():
         return render_template("create_short_post.html")
     else:
         if session["csrf_token"] != request.form["csrf_token"]:
-            return redirect("/logout")
+            return redirect("/logout", msg="csfr_token error")
         username = session["username"]
         post_type = request.form["type"]
 
@@ -193,3 +193,21 @@ def private():
 @app.route("/show/<int:id>")
 def show(id):
     return content.get_image(id)
+
+
+@app.route("/message", methods=["GET", "POST"])
+def message():
+    if request.method == "GET":
+        return render_template("message.html")
+    else:
+        if session["csrf_token"] != request.form["csrf_token"]:
+            return redirect("/logout", msg="csrf_token error")
+
+        user_message = request.form["message"]
+        if len(user_message) > 2000:
+            return render_template("message.html", msg="liian pitkä viesti :(")
+
+        username = session["username"]
+        database.insert_message(username, user_message)
+
+        return render_template("message.html", msg="viestin lähetys onnistui")

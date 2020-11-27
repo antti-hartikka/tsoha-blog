@@ -1,0 +1,18 @@
+<!doctype html>
+{% extends "layout.html" %}
+
+{% block title %}
+    viestin lähetys
+{% endblock %}
+
+{% block content %}
+    <form action="/message" method="POST">
+        <div class="form-group">
+    <label for="message">Kirjoita viestisi tähän</label>
+    <textarea class="form-control" id="message" rows="3", name="message"></textarea>
+            <br>
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+        <button type="submit" class="btn btn-primary">Lähetä viesti</button>
+  </div>
+    </form>
+{% endblock %}

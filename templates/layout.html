@@ -12,7 +12,7 @@
     {% endif %}
     <hr>
     {% if msg is defined and msg != "ok" %}
-        <p>Virhe: {{ error }}</p>
+        <p>Viesti: {{ msg }}</p>
         <hr>
     {% endif %}
     {% block content %}
@@ -20,7 +20,7 @@
     <hr>
     <div class="row">
         <div class="col">
-            Laita viesti asianomaiselle <a href="#">tästä</a>
+            Laita viesti asianomaiselle <a href="/message">tästä</a>
         </div>
     </div>
 </div>
