@@ -1,0 +1,23 @@
+<!doctype html>
+{% extends "layout.html" %}
+
+{% block title %}
+    saapuneet viestit
+{% endblock %}
+
+{% block content %}
+    <h3>Saapuneet viestit:</h3>
+    <br>
+
+    {% for message in messages %}
+        <form action="/show_messages" method="POST">
+            <p>{{ message[1] }} kirjoitti {{ message[3] }}: {{ message[2] }}</p>
+            <div class="form-group">
+                <input type="hidden" name="message_id" value="{{ message[0] }}">
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                <button type="submit" class="btn btn-primary">Poista viesti</button>
+            </div>
+        </form>
+        <br>
+    {% endfor %}
+{% endblock %}

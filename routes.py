@@ -178,6 +178,8 @@ def create_short():
 @app.route("/admintools", methods=["GET", "POST"])
 def admintools():
     if request.method == "GET":
+        if session["user_type"] != "admin":
+            redirect("/")
         user_list = accounts.get_user_list()
         return render_template("admintools.html", users=user_list)
     else:
@@ -211,3 +213,19 @@ def message():
         database.insert_message(username, user_message)
 
         return render_template("message.html", msg="viestin lähetys onnistui")
+
+
+@app.route("/show_messages", methods=["GET", "POST"])
+def show_messages():
+    if session["user_type"] != "admin":
+        return redirect("/")
+    if request.method == "GET":
+        message_list = database.get_messages()
+        return render_template("show_messages.html", messages=message_list)
+    else:
+        if session["csrf_token"] != request.form["csrf_token"]:
+            return redirect("/logout", msg="csrf_token error")
+
+        message_id = request.form["message_id"]
+        database.delete_message(message_id)
+        return redirect("/show_messages")
