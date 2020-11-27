@@ -11,7 +11,7 @@ CREATE TABLE posts (
     user_id INTEGER REFERENCES users,
     post_type TEXT,  -- short, long, private
     title TEXT,
-    date_created DATE,
+    date_created TIMESTAMP,
     is_visible BOOLEAN
 );
 
@@ -36,7 +36,7 @@ CREATE TABLE postcontent (
 CREATE TABLE messages (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users,
-    date_created DATE,
+    date_created TIMESTAMP,
     message TEXT
 );
 
@@ -44,6 +44,6 @@ CREATE TABLE comments  (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users,
     post_id INTEGER REFERENCES posts,
-    date_created DATE,
+    date_created TIMESTAMP,
     comment TEXT
 );
