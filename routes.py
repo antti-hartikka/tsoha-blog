@@ -34,11 +34,12 @@ def index():
 @app.route("/stories")
 def stories():
     posts = content.get_posts("long")
-    return render_template("stories.html", posts=posts)
+    story_list = posts.fetchall()
+    return render_template("stories.html", stories=story_list)
 
 
-@app.route("/story/<int:id>")
-def story(id):
+@app.route("/story/<int:story_id>")
+def story(story_id):
     return render_template("story.html")
 
 
@@ -73,7 +74,7 @@ def account(username):
         return render_template("account.html", username=username, usergroup=user_type)
     else:
         if session["csrf_token"] != request.form["csrf_token"]:
-            return redirect("/logout", msg="csfr_token error")
+            return redirect("/logout")
 
         action = request.form["action"]
         result = "ok"
@@ -99,10 +100,10 @@ def account(username):
 @app.route("/create_long", methods=["GET", "POST"])
 def create_long():
     if request.method == "GET":
-        return render_template("/create_long_post.html")
+        return render_template("create_long_post.html")
     else:
         if session["csrf_token"] != request.form["csrf_token"]:
-            return redirect("/logout", msg="csfr_token error")
+            return redirect("/logout")
 
         username = session["username"]
         title = request.form["title"]
@@ -127,7 +128,7 @@ def create_long():
                 else:
                     content.add_content(post_id, image_id, content_type, alternative)
 
-        return redirect("/story/" + str(post_id))
+        return redirect("/stories")
 
 
 @app.route("/login", methods=["POST"])
@@ -157,7 +158,7 @@ def create_short():
         return render_template("create_short_post.html")
     else:
         if session["csrf_token"] != request.form["csrf_token"]:
-            return redirect("/logout", msg="csfr_token error")
+            return redirect("/logout")
         username = session["username"]
         post_type = request.form["type"]
 
@@ -189,12 +190,12 @@ def admintools():
 
 @app.route("/private")
 def private():
-    return render_template("/private.html")
+    return render_template("private.html")
 
 
-@app.route("/show/<int:id>")
-def show(id):
-    return content.get_image(id)
+@app.route("/show/<int:image_id>")
+def show(image_id):
+    return content.get_image(image_id)
 
 
 @app.route("/message", methods=["GET", "POST"])
@@ -203,7 +204,7 @@ def message():
         return render_template("message.html")
     else:
         if session["csrf_token"] != request.form["csrf_token"]:
-            return redirect("/logout", msg="csrf_token error")
+            return redirect("/logout")
 
         user_message = request.form["message"]
         if len(user_message) > 2000:
@@ -224,7 +225,7 @@ def show_messages():
         return render_template("show_messages.html", messages=message_list)
     else:
         if session["csrf_token"] != request.form["csrf_token"]:
-            return redirect("/logout", msg="csrf_token error")
+            return redirect("/logout")
 
         message_id = request.form["message_id"]
         database.delete_message(message_id)
