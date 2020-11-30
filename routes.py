@@ -1,7 +1,10 @@
+import comment
+import image
+import post
 from app import app
 from flask import redirect, render_template, request, session
 
-import database
+import message
 import accounts
 import content
 import os
@@ -25,16 +28,16 @@ def index():
 
 @app.route("/stories")
 def stories():
-    posts = content.get_posts("long")
+    posts = post.get_posts("long")
     return render_template("stories.html", stories=posts)
 
 
 @app.route("/story/<int:story_id>", methods=["GET", "POST"])
 def story(story_id):
     if request.method == "GET":
-        post = content.get_post(story_id)
+        post = post.get_post(story_id)
         postcontent = content.get_content(story_id)
-        comments = database.get_comments(story_id)
+        comments = comment.get_comments(story_id)
         print(postcontent)
         return render_template("story.html", post=post, contents=postcontent, comments=comments, story_id=story_id)
     else:
@@ -43,7 +46,7 @@ def story(story_id):
                 return redirect("/logout")
             username = session["username"]
             user_comment = request.form["comment"]
-            database.insert_comment(username, story_id, user_comment)
+            comment.insert_comment(username, story_id, user_comment)
         return redirect(f"/story/{story_id}")
 
 
@@ -116,7 +119,7 @@ def create_long():
         username = session["username"]
         title = request.form["title"]
         post_type = "long"
-        post_id = content.create_new_post(username, title, post_type)
+        post_id = post.create_new_post(username, title, post_type)
 
         form_count = int(request.form["count"])
         for i in range(form_count):
@@ -128,7 +131,7 @@ def create_long():
             else:
                 file = request.files[f"{i}"]
                 alternative = request.form[f"{i}a"]
-                image_id = content.add_image(file)
+                image_id = image.add_image(file)
                 content_type = "image"
 
                 # if file input returns error string
@@ -173,14 +176,14 @@ def create_short():
         post_type = request.form["type"]
 
         file = request.files["file"]
-        image_id = content.add_image(file)
+        image_id = image.add_image(file)
         if type(image_id) is str:
             return render_template("create_short_post.html", msg=image_id)
 
         content_type = "image"
         text = request.form["alternative"]
 
-        post_id = content.create_new_post(username, None, post_type)
+        post_id = post.create_new_post(username, None, post_type)
         content.add_content(post_id, image_id, content_type, text)
 
         return redirect("/")
@@ -216,7 +219,7 @@ def private():
 
 @app.route("/show/<int:image_id>")
 def show(image_id):
-    return content.get_image(image_id)
+    return image.get_image(image_id)
 
 
 @app.route("/message", methods=["GET", "POST"])
@@ -234,7 +237,7 @@ def message():
         if len(user_message) > 2000:
             return render_template("message.html", msg="liian pitkä viesti :(")
 
-        database.insert_message(username, user_message)
+        message.insert_message(username, user_message)
 
         return render_template("message.html", msg="viestin lähetys onnistui")
 
@@ -244,12 +247,12 @@ def show_messages():
     if session["user_type"] != "admin":
         return redirect("/")
     if request.method == "GET":
-        message_list = database.get_messages()
+        message_list = message.get_messages()
         return render_template("show_messages.html", messages=message_list)
     else:
         if session["csrf_token"] != request.form["csrf_token"]:
             return redirect("/logout")
 
         message_id = request.form["message_id"]
-        database.delete_message(message_id)
+        message.delete_message(message_id)
         return redirect("/show_messages")
