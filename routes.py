@@ -116,7 +116,6 @@ def create_long():
         title = request.form["title"]
         post_type = "long"
         post_id = content.create_new_post(username, title, post_type)
-        print(request.form)
 
         form_count = int(request.form["count"])
         for i in range(form_count):

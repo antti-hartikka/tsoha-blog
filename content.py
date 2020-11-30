@@ -11,8 +11,8 @@ db = SQLAlchemy(app)
 
 def create_new_post(username, title, post_type):
     user_id = accounts.get_user_id(username)
-    sql = "INSERT INTO posts (user_id, post_type, title, time_created)" \
-          "VALUES (:user_id, :type, :title, NOW()) " \
+    sql = "INSERT INTO posts (user_id, post_type, title, time_created, is_visible)" \
+          "VALUES (:user_id, :type, :title, NOW(), TRUE) " \
           "RETURNING id"
     result = db.session.execute(sql, {"user_id": user_id, "type": post_type, "title": title})
     db.session.commit()
@@ -50,7 +50,8 @@ def get_posts(post_type):
           "WHERE post_type=:post_type AND is_visible = TRUE " \
           "ORDER BY time_created DESC"
     result = db.session.execute(sql, {"post_type": post_type})
-    return result
+    post_list = result.fetchall()
+    return post_list
 
 
 # returns list of tuples containing content
