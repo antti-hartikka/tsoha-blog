@@ -2,7 +2,7 @@ CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username TEXT,
     password TEXT,
-    user_group TEXT, -- basic, approved, admin
+    usergroup TEXT, -- basic, approved, admin
     is_active BOOLEAN
 );
 
@@ -11,7 +11,7 @@ CREATE TABLE posts (
     user_id INTEGER REFERENCES users,
     post_type TEXT,  -- short, long, private
     title TEXT,
-    date_created TIMESTAMP,
+    time_created TIMESTAMP,
     is_visible BOOLEAN
 );
 
@@ -36,7 +36,7 @@ CREATE TABLE postcontent (
 CREATE TABLE messages (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users,
-    date_created TIMESTAMP,
+    time_created TIMESTAMP,
     message TEXT
 );
 
@@ -44,6 +44,8 @@ CREATE TABLE comments  (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users,
     post_id INTEGER REFERENCES posts,
-    date_created TIMESTAMP,
+    time_created TIMESTAMP,
     comment TEXT
 );
+
+INSERT INTO users (username) VALUES ('guest');

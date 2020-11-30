@@ -4,7 +4,34 @@
     {{ title }}
 {% endblock %}
 {% block content %}
-<div class="row">
-    <p> TODO : kaikki ":D"</p>
-</div>
+    <h2>{{ post[0] }}</h2>
+    <i>Luonut {{ post[2] }} {{ post[1] }}</i>
+    <br>
+    {% for content in contents %}
+
+        {% if content[2] == "image" %}
+            <img src="/show/{{ content[1] }}" class="img-fluid" alt="{{ content[3] }} ">
+        {% else %}
+            <p>{{ content[3] }}</p>
+        {% endif %}
+
+    {% endfor %}
+
+    <br>
+    <ul>
+    {% for comment in comments %}
+
+        <li>
+            {{ comment[2] }}    - {{ comment[1] }} <i>({{ comment[0] }})</i>
+        </li>
+
+    {% endfor %}
+</ul>
+    <br>
+    <form action="POST">
+        <textarea class="form-control" rows="3" cols="50" name="comment"></textarea>
+        <input type="hidden" value="{{ session.csrf_token }}" name="csrf_token">
+        <input type="submit" value="Lähetä kommentti">
+    </form>
+
 {% endblock %}

@@ -11,7 +11,7 @@ db = SQLAlchemy(app)
 
 def create_new_post(username, title, post_type):
     user_id = accounts.get_user_id(username)
-    sql = "INSERT INTO posts (user_id, post_type, title, date_created)" \
+    sql = "INSERT INTO posts (user_id, post_type, title, time_created)" \
           "VALUES (:user_id, :type, :title, NOW()) " \
           "RETURNING id"
     result = db.session.execute(sql, {"user_id": user_id, "type": post_type, "title": title})
@@ -47,8 +47,8 @@ def add_content(post_id, image_id, content_type, text):
 def get_posts(post_type):
     sql = "SELECT * " \
           "FROM posts " \
-          "WHERE post_type=:post_type " \
-          "ORDER BY date_created DESC"
+          "WHERE post_type=:post_type AND is_visible = TRUE " \
+          "ORDER BY time_created DESC"
     result = db.session.execute(sql, {"post_type": post_type})
     return result
 
@@ -62,6 +62,7 @@ def get_content(post_id):
           "WHERE p.id=:post_id " \
           "ORDER BY c.order_number ASC"
     result = db.session.execute(sql, {"post_id": post_id})
+    content = result.fetchall()
     return result
 
 
@@ -89,10 +90,31 @@ def add_image(file):
     return image_id
 
 
-def get_image(id):
+def get_image(image_id):
     sql = "SELECT data FROM images WHERE id=:id"
-    result = db.session.execute(sql, {"id": id})
+    result = db.session.execute(sql, {"id": image_id})
     data = result.fetchone()[0]
     response = make_response(bytes(data))
     response.headers.set("Content-Type", "image/jpeg")
     return response
+
+
+def get_post(story_id):
+    sql = "SELECT p.title, p.time_created, u.username " \
+          "FROM posts p " \
+          "JOIN users u on u.id = p.user_id " \
+          "WHERE is_visible = TRUE AND p.id=:id"
+    result = db.session.execute(sql, {"id": story_id})
+    post = result.fetchone()
+    return post
+
+
+def get_shorts(post_type):
+    sql = "SELECT i.id, c.media_text FROM posts p " \
+          "JOIN postcontent pc on p.id = pc.post_id " \
+          "JOIN content c on pc.content_id = c.id " \
+          "JOIN images i on c.image_id = i.id " \
+          "WHERE p.post_type = :post_type"
+    result = db.session.execute(sql, {"post_type": post_type})
+    posts = result.fetchall()
+    return posts

@@ -9,24 +9,20 @@ import os
 
 @app.route("/")
 def index():
-    posts = content.get_posts("short")
-    contents = []
+    posts = content.get_shorts("short")
+    print(posts)
+    contents = [[], [], []]
+    count = 0;
     for i in range(3):
-        contents.append([])
         for j in range(3):
-            contents[i].append([])
-            post = posts.fetchone()
-            if post is None:
-                break
-
-            post_id = post[0]
-            cont = content.get_content(post_id).fetchone()
-            if cont is None:
-                continue
-
-            # put image id and alternative text into contents[i][j]
-            contents[i][j].append(cont[1])
-            contents[i][j].append(cont[3])
+            print(count)
+            print(len(posts))
+            if count == len(posts):
+                print(contents)
+                return render_template("index.html", posts=contents)
+            else:
+                contents[i].append(posts[count])
+                count += 1
 
     return render_template("index.html", posts=contents)
 
@@ -34,13 +30,24 @@ def index():
 @app.route("/stories")
 def stories():
     posts = content.get_posts("long")
-    story_list = posts.fetchall()
-    return render_template("stories.html", stories=story_list)
+    return render_template("stories.html", stories=posts)
 
 
-@app.route("/story/<int:story_id>")
+@app.route("/story/<int:story_id>", methods=["GET", "POST"])
 def story(story_id):
-    return render_template("story.html")
+    if request.method == "GET":
+        post = content.get_post(story_id)
+        postcontent = content.get_content(story_id)
+        comments = database.get_comments(story_id)
+        return render_template("story.html", post=post, contents=postcontent, comments=comments)
+    else:
+        if len(session) != 0:
+            if session["csrf_token"] != request.form["csrf_token"]:
+                return redirect("/logout")
+            username = session["username"]
+            comment = request.form["comment"]
+            database.insert_comment(username, story_id, comment)
+        return redirect(f"/story/{story_id}")
 
 
 @app.route("/signup", methods=["GET", "POST"])
@@ -53,7 +60,7 @@ def signup():
         result = accounts.create_user(username, password)
         if result == "ok":
             session["username"] = username
-            session["user_type"] = accounts.get_user_type(username)
+            session["user_type"] = accounts.get_usergroup(username)
             session["csrf_token"] = os.urandom(16).hex()
             return redirect("/")
         else:
@@ -69,7 +76,7 @@ def account_noname():
 
 @app.route("/account/<string:username>", methods=["GET", "POST"])
 def account(username):
-    user_type = accounts.get_user_type(username)
+    user_type = accounts.get_usergroup(username)
     if request.method == "GET":
         return render_template("account.html", username=username, usergroup=user_type)
     else:
@@ -81,6 +88,9 @@ def account(username):
         if action == "update username":
             new_username = request.form["new_username"]
             result = accounts.set_username(username, new_username)
+            if result == "ok":
+                session["username"] = new_username
+                return redirect("/account")
         if action == "update password":
             old_password = request.form["old_password"]
             if accounts.check_credentials(username, old_password):
@@ -90,11 +100,12 @@ def account(username):
                 result = "wrong password"
         if action == "update usergroup":
             new_usergroup = request.form["new_usergroup"]
-            accounts.set_user_group(username, new_usergroup)
+            accounts.set_usergroup(username, new_usergroup)
+            user_type = new_usergroup
         if action == "remove account":
             accounts.delete_account(username)
             return render_template("index.html", msg="tietosi on onnistuneesti poistettu")
-        return render_template("account.html", msg=result)
+        return render_template("account.html", msg=result, username=username, usergroup=user_type)
 
 
 @app.route("/create_long", methods=["GET", "POST"])
@@ -109,16 +120,18 @@ def create_long():
         title = request.form["title"]
         post_type = "long"
         post_id = content.create_new_post(username, title, post_type)
+        print(request.form)
 
         form_count = int(request.form["count"])
         for i in range(form_count):
-            value = request.form[str(i)]
-            if type(value) is str:
+            action = request.form[f"{i}action"]
+            if action == "paragraph":
+                value = request.form[f"{i}"]
                 content_type = "text"
                 content.add_content(post_id, None, content_type, value)
             else:
-                file = request.files[str(i)]
-                alternative = request.form[str(i) + "a"]
+                file = request.files[f"{i}"]
+                alternative = request.form[f"{i}a"]
                 image_id = content.add_image(file)
                 content_type = "image"
 
@@ -138,7 +151,7 @@ def login():
     login_ok = accounts.check_credentials(username, password)
     if login_ok:
         session["username"] = username
-        session["user_type"] = accounts.get_user_type(username)
+        session["user_type"] = accounts.get_usergroup(username)
         session["csrf_token"] = os.urandom(16).hex()
         return redirect("/")
     else:
@@ -149,6 +162,7 @@ def login():
 def logout():
     del session["username"]
     del session["user_type"]
+    del session["csrf_token"]
     return redirect("/")
 
 
@@ -203,14 +217,16 @@ def message():
     if request.method == "GET":
         return render_template("message.html")
     else:
-        if session["csrf_token"] != request.form["csrf_token"]:
-            return redirect("/logout")
+        username = "guest"
+        if len(session) != 0:
+            if session["csrf_token"] != request.form["csrf_token"]:
+                return redirect("/logout")
+            username = session["username"]
 
         user_message = request.form["message"]
         if len(user_message) > 2000:
             return render_template("message.html", msg="liian pitkä viesti :(")
 
-        username = session["username"]
         database.insert_message(username, user_message)
 
         return render_template("message.html", msg="viestin lähetys onnistui")

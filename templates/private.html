@@ -1,25 +1,13 @@
 <!doctype html>
 {% extends "layout.html" %}
 {% block content %}
-    {% if session.user_type == "approved" or session.user_type == "admin" %}
+    {% for row in posts %}
         <div class="row">
-            <div class="col-4">
-                <h2>Tässä voisi olla yksityinen kuva 1</h2>
-                <p>
-                    Ja tässä voisi olla siihen sisältöä.
-            </div>
-            <div class="col-4">
-                <h2>Tässä voisi olla yksityinen kuva 2</h2>
-                <p>
-                    Ja tässä taas vastaavaa sisältöä.
-            </div>
-            <div class="col-4">
-                <h2>Tässä voisi olla yksityinen kuva 3</h2>
-                <p>
-                    Tästä vielä kolmanteen kuvaan sisältö.
-            </div>
+            {% for post in row %}
+                <div class="col-4">
+                    <img src="/show/{{ post[0] }}" class="img-fluid" alt="{{ post[1] }} ">
+                </div>
+            {% endfor %}
         </div>
-    {% else %}
-        <p>Sorry honey, sulla ei ole lukuoikeutta tälle sivulle!</p>
-    {% endif %}
+    {% endfor %}
 {% endblock %}

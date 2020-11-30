@@ -4,10 +4,13 @@
     {% for row in posts %}
         <div class="row">
             {% for post in row %}
-                <div class="col-4">
-                    <img src="/show/{{ post[0] }}" class="img-fluid" alt="{{ post[1] }} ">
-                </div>
+                {% if post[0] != "" %}
+                    <div class="col-4">
+                        <img src="/show/{{ post[0] }}" class="img-fluid" alt="{{ post[1] }} ">
+                    </div>
+                {% endif %}
             {% endfor %}
         </div>
+        <br>
     {% endfor %}
 {% endblock %}

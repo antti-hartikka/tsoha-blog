@@ -4,6 +4,8 @@
     sisällön luonti
 {% endblock %}
 {% block content %}
+    <script src="../static/longPostMaker.js"></script>
+
     <p>Tällä sivulla luot uuden pitkän postauksen</p>
     <br>
     <form action="/create_long" method="POST" enctype="multipart/form-data">
@@ -21,7 +23,7 @@
         <br>
 
         <button type="button" onclick="newParagraph()">Lisää tekstikappale</button>
-        <button type="button" onclick="newPicture()">Lisää kuva (max 500kb)</button>
+        <button type="button" onclick="newPicture()">Lisää kuva</button>
 
         <br>
         <br>
@@ -32,5 +34,4 @@
 
     </form>
 
-    <script src="longPostMaker.js"></script>
 {% endblock %}}

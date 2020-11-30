@@ -19,7 +19,7 @@ def create_user(username, password):
         return "username taken"
     if not validate_password(password):
         return "password not ok"
-    sql = "INSERT INTO users (username, password, user_group, is_active) " \
+    sql = "INSERT INTO users (username, password, usergroup, is_active) " \
           "VALUES (:username, :password, 'basic', TRUE)"
     password_hash = generate_password_hash(password)
     db.session.execute(sql, {"username": username, "password": password_hash})
@@ -71,22 +71,24 @@ def set_password(username, new_password):
     return "ok"
 
 
-def set_user_group(username, user_type):
+def set_usergroup(username, usergroup):
     sql = "UPDATE users " \
-          "SET user_group=:new_group " \
+          "SET usergroup=:new_group " \
           "WHERE username=:username"
-    db.session.execute(sql, {"new_group": user_type, "username": username})
+    db.session.execute(sql, {"new_group": usergroup, "username": username})
     db.session.commit()
 
 
-def get_user_type(username):
-    sql = "SELECT user_group " \
+def get_usergroup(username):
+    sql = "SELECT usergroup " \
           "FROM users " \
           "WHERE username=:username"
     result = db.session.execute(sql, {"username": username})
     user = result.fetchone()
-    user_type = user[0]
-    return user_type
+    if user is None:
+        return ""
+    usergroup = user[0]
+    return usergroup
 
 
 def get_user_list():
@@ -112,7 +114,7 @@ def user_exists(username):
 
 # set user type to basic, set password to "deleted", set username to "[deleted]", set is_active to FALSE
 def delete_account(username):
-    set_user_group(username, "basic")
+    set_usergroup(username, "basic")
     password = generate_password_hash("deleted")
     set_password(username, password)
     sql = "UPDATE users " \
