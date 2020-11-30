@@ -2,7 +2,7 @@
 
 Harjoitustyöni tulee olemaan blogialusta muutamalla toiminnallisuudella:
 
-Blogissa on mahdollisuus tehdä kolmenlaisia postauksia: lyhyt yhden kuvan/videon pikapostaus kuvatekstillä (löytyy etusivulta), perinteinen pidempi blogipostaus joka ladotaan kuvista, videoista ja tekstistä halutussa järjestyksessä, sekä lyhyt postaus joka näkyy vain kirjautuneille käyttäjille joilla on adminin hyväksyntä (tarkoituksena luoda ympäristö sisällölle, jota ei haluta kaikkien saataville).
+Blogissa on mahdollisuus tehdä kolmenlaisia postauksia: lyhyt yhden kuvan pikapostaus (löytyy etusivulta), perinteinen pidempi blogipostaus joka ladotaan kuvista ja tekstistä halutussa järjestyksessä, sekä lyhyt postaus joka näkyy vain kirjautuneille käyttäjille joilla on adminin hyväksyntä (tarkoituksena luoda ympäristö sisällölle, jota ei haluta kaikkien saataville).
 
 Käyttäjiä on neljässä kategoriassa:
 1. Käyttäjä, joka ei ole kirjautunut.
@@ -24,12 +24,13 @@ Käyttäjiä on neljässä kategoriassa:
   ----------
 
 
-Sovellusta voi testata osoitteessa https://pure-shelf-99302.herokuapp.com/.
-Sovelluksen sivut ovat "hieman" vaiheessa, sovellukseen pystyy kuitenkin mm. kirjautumaan sisään ja tarkastelemaan erilaisia näkymiä eri käyttäjäryhmien näkökulmasta.
+Sovellusta voi testata osoitteessa https://pure-shelf-99302.herokuapp.com/
+
 
 Näkymät sovelluksen käyttäjäryhmiin saa seuraavilla testikäyttäjätunnuksilla:
 * admin g6LEWTkMpnL7hP
 * perus 624v9sGWG84sjg
 * luoja p4srDNiimn46J3
 
-Koodi on tällä hetkellä jäsennelty huonosti ja tavoitteena onkin refaktorointi ensi viikolla.
+
+Tämä vertaisarvioinnin päivä meni hieman ohi itseltäni, mutta onneksi sovellus on hyvässä vaiheessa ja sain dumpattua nykyisen version ongelmitta herokuun. Koodissa on vielä jonkin verran sekalaisuutta ja kommentoitavaa sekä refaktorointia on vielä tekemättä. Tärkeimpien toiminnallisuuksien pitäisi kuitenkin olla olemassa, joitain postauksen poistoon tarkoittettujen nappien kaltaisia toimintoja on vielä toteuttamatta. 
