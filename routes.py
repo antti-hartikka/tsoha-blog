@@ -10,15 +10,11 @@ import os
 @app.route("/")
 def index():
     posts = content.get_shorts("short")
-    print(posts)
     contents = [[], [], []]
     count = 0;
     for i in range(3):
         for j in range(3):
-            print(count)
-            print(len(posts))
             if count == len(posts):
-                print(contents)
                 return render_template("index.html", posts=contents)
             else:
                 contents[i].append(posts[count])
@@ -204,7 +200,18 @@ def admintools():
 
 @app.route("/private")
 def private():
-    return render_template("private.html")
+    posts = content.get_shorts("private")
+    contents = [[], [], []]
+    count = 0;
+    for i in range(3):
+        for j in range(3):
+            if count == len(posts):
+                return render_template("private.html", posts=contents)
+            else:
+                contents[i].append(posts[count])
+                count += 1
+
+    return render_template("private.html", posts=contents)
 
 
 @app.route("/show/<int:image_id>")
