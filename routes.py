@@ -36,14 +36,14 @@ def story(story_id):
         postcontent = content.get_content(story_id)
         comments = database.get_comments(story_id)
         print(postcontent)
-        return render_template("story.html", post=post, contents=postcontent, comments=comments)
+        return render_template("story.html", post=post, contents=postcontent, comments=comments, story_id=story_id)
     else:
         if len(session) != 0:
             if session["csrf_token"] != request.form["csrf_token"]:
                 return redirect("/logout")
             username = session["username"]
-            comment = request.form["comment"]
-            database.insert_comment(username, story_id, comment)
+            user_comment = request.form["comment"]
+            database.insert_comment(username, story_id, user_comment)
         return redirect(f"/story/{story_id}")
 
 

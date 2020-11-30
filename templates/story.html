@@ -18,6 +18,7 @@
     {% endfor %}
 
     <br>
+    <h6>Kommentit:</h6>
     <ul>
     {% for comment in comments %}
 
@@ -28,7 +29,7 @@
     {% endfor %}
 </ul>
     <br>
-    <form action="POST">
+    <form action="/story/{{ story_id }}" method="POST">
         <textarea class="form-control" rows="3" cols="50" name="comment"></textarea>
         <input type="hidden" value="{{ session.csrf_token }}" name="csrf_token">
         <input type="submit" value="Lähetä kommentti">
