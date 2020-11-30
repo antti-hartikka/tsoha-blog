@@ -64,7 +64,7 @@ def get_content(post_id):
           "ORDER BY c.order_number ASC"
     result = db.session.execute(sql, {"post_id": post_id})
     content = result.fetchall()
-    return result
+    return content
 
 
 def modify_post(post_id, new_title):

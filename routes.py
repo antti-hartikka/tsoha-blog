@@ -35,6 +35,7 @@ def story(story_id):
         post = content.get_post(story_id)
         postcontent = content.get_content(story_id)
         comments = database.get_comments(story_id)
+        print(postcontent)
         return render_template("story.html", post=post, contents=postcontent, comments=comments)
     else:
         if len(session) != 0:
