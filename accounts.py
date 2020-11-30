@@ -1,11 +1,6 @@
-import message
-from app import app
-from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash, generate_password_hash
 import re
-
-
-db = SQLAlchemy(app)
+from app import db
 
 
 # if username validation is not ok, returns "username not ok"
@@ -71,15 +66,15 @@ def set_password(username, new_password):
     return "ok"
 
 
-def set_usergroup(username, usergroup):
+def set_user_group(username, user_group):
     sql = "UPDATE users " \
           "SET usergroup=:new_group " \
           "WHERE username=:username"
-    db.session.execute(sql, {"new_group": usergroup, "username": username})
+    db.session.execute(sql, {"new_group": user_group, "username": username})
     db.session.commit()
 
 
-def get_usergroup(username):
+def get_user_group(username):
     sql = "SELECT usergroup " \
           "FROM users " \
           "WHERE username=:username"
@@ -87,8 +82,8 @@ def get_usergroup(username):
     user = result.fetchone()
     if user is None:
         return ""
-    usergroup = user[0]
-    return usergroup
+    user_group = user[0]
+    return user_group
 
 
 def get_user_list():
@@ -114,7 +109,7 @@ def user_exists(username):
 
 # set user type to basic, set password to "deleted", set username to "[deleted]", set is_active to FALSE
 def delete_account(username):
-    set_usergroup(username, "basic")
+    set_user_group(username, "basic")
     password = generate_password_hash("deleted")
     set_password(username, password)
     sql = "UPDATE users " \

@@ -1,6 +1,5 @@
 from flask import make_response
-
-from content import db
+from app import db
 
 
 def get_image(image_id):

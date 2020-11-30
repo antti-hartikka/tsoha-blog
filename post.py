@@ -1,10 +1,5 @@
 import accounts
-from app import app
-from flask_sqlalchemy import SQLAlchemy
-
-from content import db
-
-db = SQLAlchemy(app)
+from app import db
 
 
 def create_new_post(username, title, post_type):
@@ -36,3 +31,9 @@ def get_post(story_id):
     result = db.session.execute(sql, {"id": story_id})
     post = result.fetchone()
     return post
+
+
+def remove_post(story_id):
+    sql = "UPDATE posts SET is_visible = FALSE WHERE id=:story_id"
+    db.session.execute(sql, {"story_id": story_id})
+    db.session.commit()

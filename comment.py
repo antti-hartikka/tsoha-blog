@@ -1,5 +1,5 @@
 import accounts
-from message import db
+from app import db
 
 
 def get_comments(post_id):

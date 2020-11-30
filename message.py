@@ -1,9 +1,5 @@
-from app import app
-from flask_sqlalchemy import SQLAlchemy
-
 import accounts
-
-db = SQLAlchemy(app)
+from app import db
 
 
 def insert_message(username, message):
@@ -27,5 +23,3 @@ def delete_message(message_id):
     sql = "DELETE FROM messages WHERE id = :id"
     db.session.execute(sql, {"id": message_id})
     db.session.commit()
-
-

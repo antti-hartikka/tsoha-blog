@@ -1,7 +1,4 @@
-from app import app
-from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy(app)
+from app import db
 
 
 def add_content(post_id, image_id, content_type, text):
@@ -33,8 +30,7 @@ def get_content(post_id):
           "FROM content c " \
           "JOIN postcontent pc on c.id = pc.content_id " \
           "JOIN posts p on pc.post_id = p.id " \
-          "WHERE p.id=:post_id " \
-          "ORDER BY c.order_number ASC"
+          "WHERE p.id=:post_id "
     result = db.session.execute(sql, {"post_id": post_id})
     content = result.fetchall()
     return content

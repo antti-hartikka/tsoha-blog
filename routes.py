@@ -14,7 +14,7 @@ import os
 def index():
     posts = content.get_shorts("short")
     contents = [[], [], []]
-    count = 0;
+    count = 0
     for i in range(3):
         for j in range(3):
             if count == len(posts):
@@ -26,20 +26,32 @@ def index():
     return render_template("index.html", posts=contents)
 
 
-@app.route("/stories")
+@app.route("/stories", methods=["GET", "POST"])
 def stories():
-    posts = post.get_posts("long")
-    return render_template("stories.html", stories=posts)
+    if request.method == "GET":
+        posts = post.get_posts("long")
+        return render_template("stories.html", stories=posts)
+    else:
+        if session["csrf_token"] != request.form["csrf_token"]:
+            return redirect("/logout")
+        story_id = request.form["story_id"]
+        post.remove_post(story_id)
+        return redirect("/stories")
 
 
 @app.route("/story/<int:story_id>", methods=["GET", "POST"])
 def story(story_id):
     if request.method == "GET":
-        post = post.get_post(story_id)
+        this_story = post.get_post(story_id)
         postcontent = content.get_content(story_id)
         comments = comment.get_comments(story_id)
-        print(postcontent)
-        return render_template("story.html", post=post, contents=postcontent, comments=comments, story_id=story_id)
+        return render_template(
+            "story.html",
+            post=this_story,
+            contents=postcontent,
+            comments=comments,
+            story_id=story_id
+        )
     else:
         if len(session) != 0:
             if session["csrf_token"] != request.form["csrf_token"]:
@@ -60,7 +72,7 @@ def signup():
         result = accounts.create_user(username, password)
         if result == "ok":
             session["username"] = username
-            session["user_type"] = accounts.get_usergroup(username)
+            session["user_type"] = accounts.get_user_group(username)
             session["csrf_token"] = os.urandom(16).hex()
             return redirect("/")
         else:
@@ -76,7 +88,7 @@ def account_noname():
 
 @app.route("/account/<string:username>", methods=["GET", "POST"])
 def account(username):
-    user_type = accounts.get_usergroup(username)
+    user_type = accounts.get_user_group(username)
     if request.method == "GET":
         return render_template("account.html", username=username, usergroup=user_type)
     else:
@@ -100,7 +112,7 @@ def account(username):
                 result = "wrong password"
         if action == "update usergroup":
             new_usergroup = request.form["new_usergroup"]
-            accounts.set_usergroup(username, new_usergroup)
+            accounts.set_user_group(username, new_usergroup)
             user_type = new_usergroup
         if action == "remove account":
             accounts.delete_account(username)
@@ -150,7 +162,7 @@ def login():
     login_ok = accounts.check_credentials(username, password)
     if login_ok:
         session["username"] = username
-        session["user_type"] = accounts.get_usergroup(username)
+        session["user_type"] = accounts.get_user_group(username)
         session["csrf_token"] = os.urandom(16).hex()
         return redirect("/")
     else:
@@ -205,7 +217,7 @@ def admintools():
 def private():
     posts = content.get_shorts("private")
     contents = [[], [], []]
-    count = 0;
+    count = 0
     for i in range(3):
         for j in range(3):
             if count == len(posts):
