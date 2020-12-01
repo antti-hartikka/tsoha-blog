@@ -76,7 +76,7 @@ let count = 0
             let label = document.createElement("label")
             label.setAttribute("for", "text")
 
-            let text = document.createTextNode("Anna kuvalle vaihtoehtoinen teksti:")
+            let text = document.createTextNode("Vaihtoehtoinen teksti jos kuvaa ei voida näyttää:")
             label.appendChild(text)
 
             newElement.appendChild(label)
