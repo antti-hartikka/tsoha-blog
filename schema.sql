@@ -2,7 +2,7 @@ CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username TEXT,
     password TEXT,
-    usergroup TEXT, -- basic, approved, admin
+    user_group TEXT, -- basic, approved, admin
     is_active BOOLEAN
 );
 
@@ -23,8 +23,8 @@ CREATE TABLE images (
 CREATE TABLE content(
     id SERIAL PRIMARY KEY,
     image_id INTEGER REFERENCES images,
-    media_text TEXT,
-    media_type TEXT,  -- text, image
+    text TEXT,
+    type TEXT,  -- text, image
     order_number INTEGER
 );
 

@@ -10,7 +10,7 @@ def add_content(post_id, image_id, content_type, text):
     order = result.fetchone()[0]
 
     # insert content info
-    sql = "INSERT INTO content (image_id, media_text, media_type, order_number)" \
+    sql = "INSERT INTO content (image_id, text, type, order_number)" \
           "VALUES (:image_id, :text, :type, :order) " \
           "RETURNING id"
     result = db.session.execute(sql, {"image_id": image_id, "text": text, "type": content_type, "order": order})
@@ -26,7 +26,7 @@ def add_content(post_id, image_id, content_type, text):
 
 # returns list of tuples containing content
 def get_content(post_id):
-    sql = "SELECT user_id, image_id, media_type, media_text " \
+    sql = "SELECT user_id, image_id, type, text " \
           "FROM content c " \
           "JOIN postcontent pc on c.id = pc.content_id " \
           "JOIN posts p on pc.post_id = p.id " \
@@ -37,7 +37,7 @@ def get_content(post_id):
 
 
 def get_shorts(post_type):
-    sql = "SELECT i.id, c.media_text, p.id FROM posts p " \
+    sql = "SELECT i.id, c.text, p.id FROM posts p " \
           "JOIN postcontent pc on p.id = pc.post_id " \
           "JOIN content c on pc.content_id = c.id " \
           "JOIN images i on c.image_id = i.id " \

@@ -14,7 +14,7 @@ def create_user(username, password):
         return "username taken"
     if not validate_password(password):
         return "password not ok"
-    sql = "INSERT INTO users (username, password, usergroup, is_active) " \
+    sql = "INSERT INTO users (username, password, user_group, is_active) " \
           "VALUES (:username, :password, 'basic', TRUE)"
     password_hash = generate_password_hash(password)
     db.session.execute(sql, {"username": username, "password": password_hash})
@@ -68,14 +68,14 @@ def set_password(username, new_password):
 
 def set_user_group(username, user_group):
     sql = "UPDATE users " \
-          "SET usergroup=:new_group " \
+          "SET user_group=:new_group " \
           "WHERE username=:username"
     db.session.execute(sql, {"new_group": user_group, "username": username})
     db.session.commit()
 
 
 def get_user_group(username):
-    sql = "SELECT usergroup " \
+    sql = "SELECT user_group " \
           "FROM users " \
           "WHERE username=:username"
     result = db.session.execute(sql, {"username": username})
