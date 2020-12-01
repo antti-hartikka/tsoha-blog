@@ -20,19 +20,27 @@
     <br>
     <h6>Kommentit:</h6>
     <ul>
-    {% for comment in comments %}
+        {% for comment in comments %}
 
-        <li>
-            {{ comment[2] }}    - {{ comment[1] }} <i>({{ comment[0] }})</i>
-        </li>
+            <li>
+                {{ comment[2] }} - {{ comment[1] }} <i>({{ comment[0] }})</i>
+                {% if session.user_type == "admin" %}
+                    <form action="/story" method="POST">
+                        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                        <input type="hidden" name="comment_id" value="{{ comment[3] }}">
+                        <input type="submit" class="btn btn-danger btn-sm" value="Poista kommentti">
+                    </form>
+                {% endif %}
+            </li>
 
-    {% endfor %}
-</ul>
-    <br>
-    <form action="/story/{{ story_id }}" method="POST">
-        <textarea class="form-control" rows="3" cols="50" name="comment"></textarea>
-        <input type="hidden" value="{{ session.csrf_token }}" name="csrf_token">
-        <input type="submit" value="Lähetä kommentti">
-    </form>
-
+        {% endfor %}
+    </ul>
+    {% if session.username and session.user_type != "admin" %}
+        <br>
+        <form action="/story/{{ story_id }}" method="POST">
+            <textarea class="form-control" rows="3" cols="50" name="comment"></textarea>
+            <input type="hidden" value="{{ session.csrf_token }}" name="csrf_token">
+            <input type="submit" class="btn btn-primary" value="Lähetä kommentti">
+        </form>
+    {% endif %}
 {% endblock %}

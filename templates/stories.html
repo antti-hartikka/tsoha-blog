@@ -11,13 +11,13 @@
 
     {% for story in stories %}
 
-        <h6><a href="/story/{{ story[0] }}">{{ story[3] }}</a></h6>
+        <h4><a href="/story/{{ story[0] }}">{{ story[3] }}</a></h4>
         <p><i>{{ story[4] }}</i></p>
         {% if session.user_type == "admin" %}
             <form action="/stories" method="POST">
                 <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
                 <input type="hidden" name="story_id" value="{{ story[0] }}">
-                <input type="submit" class="btn btn-danger" value="Poista tarina">
+                <input type="submit" class="btn btn-danger btn-sm" value="Poista tarina">
             </form>
         {% endif %}
         <br>

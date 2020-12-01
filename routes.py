@@ -10,20 +10,26 @@ import content
 import os
 
 
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 def index():
-    posts = content.get_shorts("short")
-    contents = [[], [], []]
-    count = 0
-    for i in range(3):
-        for j in range(3):
-            if count == len(posts):
-                return render_template("index.html", posts=contents)
-            else:
-                contents[i].append(posts[count])
-                count += 1
-
-    return render_template("index.html", posts=contents)
+    if request.method == "GET":
+        posts = content.get_shorts("short")
+        contents = [[], [], []]
+        count = 0
+        for i in range(5):
+            for j in range(3):
+                if count == len(posts):
+                    return render_template("index.html", posts=contents)
+                else:
+                    contents[i].append(posts[count])
+                    count += 1
+        return render_template("index.html", posts=contents)
+    else:
+        if session["csrf_token"] != request.form["csrf_token"] or session["user_type"] != "admin":
+            return redirect("/logout")
+        post_id = request.form["post_id"]
+        post.remove_post(post_id)
+        return redirect("/")
 
 
 @app.route("/stories", methods=["GET", "POST"])
@@ -32,7 +38,7 @@ def stories():
         posts = post.get_posts("long")
         return render_template("stories.html", stories=posts)
     else:
-        if session["csrf_token"] != request.form["csrf_token"]:
+        if session["csrf_token"] != request.form["csrf_token"] or session["user_type"] != "admin":
             return redirect("/logout")
         story_id = request.form["story_id"]
         post.remove_post(story_id)
@@ -56,9 +62,13 @@ def story(story_id):
         if len(session) != 0:
             if session["csrf_token"] != request.form["csrf_token"]:
                 return redirect("/logout")
-            username = session["username"]
-            user_comment = request.form["comment"]
-            comment.insert_comment(username, story_id, user_comment)
+            if session["user_type"] == "admin":
+                comment_id = request.form["comment_id"]
+                comment.remove_comment(comment_id)
+            else:
+                username = session["username"]
+                user_comment = request.form["comment"]
+                comment.insert_comment(username, story_id, user_comment)
         return redirect(f"/story/{story_id}")
 
 
