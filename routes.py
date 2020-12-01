@@ -25,7 +25,7 @@ def index():
                     count += 1
         return render_template("index.html", posts=contents)
     else:
-        if session["csrf_token"] != request.form["csrf_token"] or session["user_type"] != "admin":
+        if session["csrf_token"] != request.form["csrf_token"] or session["user_group"] != "admin":
             return redirect("/logout")
         post_id = request.form["post_id"]
         post.remove_post(post_id)
@@ -38,7 +38,7 @@ def stories():
         posts = post.get_posts("long")
         return render_template("stories.html", stories=posts)
     else:
-        if session["csrf_token"] != request.form["csrf_token"] or session["user_type"] != "admin":
+        if session["csrf_token"] != request.form["csrf_token"] or session["user_group"] != "admin":
             return redirect("/logout")
         story_id = request.form["story_id"]
         post.remove_post(story_id)
@@ -62,7 +62,7 @@ def story(story_id):
         if len(session) != 0:
             if session["csrf_token"] != request.form["csrf_token"]:
                 return redirect("/logout")
-            if session["user_type"] == "admin":
+            if session["user_group"] == "admin":
                 comment_id = request.form["comment_id"]
                 comment.remove_comment(comment_id)
             else:
@@ -82,7 +82,7 @@ def signup():
         result = accounts.create_user(username, password)
         if result == "ok":
             session["username"] = username
-            session["user_type"] = accounts.get_user_group(username)
+            session["user_group"] = accounts.get_user_group(username)
             session["csrf_token"] = os.urandom(16).hex()
             return redirect("/")
         else:
@@ -98,9 +98,9 @@ def account_noname():
 
 @app.route("/account/<string:username>", methods=["GET", "POST"])
 def account(username):
-    user_type = accounts.get_user_group(username)
+    user_group = accounts.get_user_group(username)
     if request.method == "GET":
-        return render_template("account.html", username=username, usergroup=user_type)
+        return render_template("account.html", username=username, user_group=user_group)
     else:
         if session["csrf_token"] != request.form["csrf_token"]:
             return redirect("/logout")
@@ -120,14 +120,14 @@ def account(username):
                 result = accounts.set_password(username, new_password)
             else:
                 result = "wrong password"
-        if action == "update usergroup":
-            new_usergroup = request.form["new_usergroup"]
-            accounts.set_user_group(username, new_usergroup)
-            user_type = new_usergroup
+        if action == "update user_group":
+            new_user_group = request.form["new_user_group"]
+            accounts.set_user_group(username, new_user_group)
+            user_group = new_user_group
         if action == "remove account":
             accounts.delete_account(username)
             return render_template("index.html", msg="tietosi on onnistuneesti poistettu")
-        return render_template("account.html", msg=result, username=username, usergroup=user_type)
+        return render_template("account.html", msg=result, username=username, user_group=user_group)
 
 
 @app.route("/create_long", methods=["GET", "POST"])
@@ -172,7 +172,7 @@ def login():
     login_ok = accounts.check_credentials(username, password)
     if login_ok:
         session["username"] = username
-        session["user_type"] = accounts.get_user_group(username)
+        session["user_group"] = accounts.get_user_group(username)
         session["csrf_token"] = os.urandom(16).hex()
         return redirect("/")
     else:
@@ -182,7 +182,7 @@ def login():
 @app.route("/logout")
 def logout():
     del session["username"]
-    del session["user_type"]
+    del session["user_group"]
     del session["csrf_token"]
     return redirect("/")
 
@@ -214,7 +214,7 @@ def create_short():
 @app.route("/admintools", methods=["GET", "POST"])
 def admintools():
     if request.method == "GET":
-        if session["user_type"] != "admin":
+        if session["user_group"] != "admin":
             redirect("/")
         user_list = accounts.get_user_list()
         return render_template("admintools.html", users=user_list)
@@ -238,7 +238,7 @@ def private():
                     count += 1
         return render_template("private.html", posts=contents)
     else:
-        if session["csrf_token"] != request.form["csrf_token"] or session["user_type"] != "admin":
+        if session["csrf_token"] != request.form["csrf_token"] or session["user_group"] != "admin":
             return redirect("/logout")
         post_id = request.form["post_id"]
         post.remove_post(post_id)
@@ -272,15 +272,15 @@ def message():
 
 @app.route("/show_messages", methods=["GET", "POST"])
 def show_messages():
-    if session["user_type"] != "admin":
+    if session["user_group"] != "admin":
         return redirect("/")
     if request.method == "GET":
-        message_list = message.get_messages()
+        message_list = messages.get_messages()
         return render_template("show_messages.html", messages=message_list)
     else:
         if session["csrf_token"] != request.form["csrf_token"]:
             return redirect("/logout")
 
         message_id = request.form["message_id"]
-        message.delete_message(message_id)
+        messages.delete_message(message_id)
         return redirect("/show_messages")
