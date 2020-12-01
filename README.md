@@ -35,4 +35,4 @@ Näkymät sovelluksen käyttäjäryhmiin saa seuraavilla testikäyttäjätunnuks
 * luoja p4srDNiimn46J3
 
 
-Sovellus on jo melkein valmis, enää tarvitsee pientä viilausta koodin selkiyttämiseksi, mm. muuttujien nimeäminen yhdenmukaistamiseksi ja koodin dokumentaatio edes jollain tasolla. 
+Sovellus on jo melkein valmis: pientä viilausta enää sinne tai tänne!
