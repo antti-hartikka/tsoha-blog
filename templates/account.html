@@ -4,7 +4,7 @@
     tilin tiedot
 {% endblock %}
 {% block content %}
-    {% if session.username == username or session.user_type == "admin" %}
+    {% if session.username == username or session.user_group == "admin" %}
         <p>Tällä sivulla näet itseäsi koskevat tiedot ja voit muuttaa niitä</p>
 
         {% if session.username != username %}
@@ -16,7 +16,7 @@
         <br>
 
         <p>Käyttäjänimi: {{ username }}</p>
-        <p>Käyttäjäryhmä: {{ usergroup }} </p>
+        <p>Käyttäjäryhmä: {{ user_group }} </p>
 
         <br>
 
@@ -49,12 +49,12 @@
             <input type="hidden" name="action" value="update password">
         </form>
 
-        {% if session.user_type == "admin" %}
+        {% if session.user_group == "admin" %}
             <br>
             <form action="/account/{{ username }}" method="POST">
                 <div class="form-group">
-                    <label for="usergroups">Valitse uusi käyttäjäryhmä</label>
-                    <select class="form-control" id="usergroups" name="new_usergroup">
+                    <label for="user_groups">Valitse uusi käyttäjäryhmä</label>
+                    <select class="form-control" id="user_groups" name="new_user_group">
                         <option>basic</option>
                         <option>approved</option>
                         <option>admin</option>
@@ -62,7 +62,7 @@
                 </div>
                 <input type="submit" value="Vaihda käyttäjäryhmää" class="btn btn-primary">
                 <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                <input type="hidden" name="action" value="update usergroup">
+                <input type="hidden" name="action" value="update user_group">
             </form>
 
         {% endif %}

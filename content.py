@@ -24,8 +24,9 @@ def add_content(post_id, image_id, content_type, text):
     db.session.commit()
 
 
-# returns list of tuples containing content
 def get_content(post_id):
+    """returns list of tuples containing content: [0]: user_id, [1]: image_id,
+    [2]: content type, [3]: text"""
     sql = "SELECT user_id, image_id, type, text " \
           "FROM content c " \
           "JOIN postcontent pc on c.id = pc.content_id " \
@@ -37,6 +38,8 @@ def get_content(post_id):
 
 
 def get_shorts(post_type):
+    """returns list of tuples containing short posts:
+    [0]: id, [1]: alternative text, [2]: id"""
     sql = "SELECT i.id, c.text, p.id FROM posts p " \
           "JOIN postcontent pc on p.id = pc.post_id " \
           "JOIN content c on pc.content_id = c.id " \

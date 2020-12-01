@@ -4,13 +4,14 @@ from app import db
 
 def insert_message(username, message):
     user_id = accounts.get_user_id(username)
-
     sql = "INSERT INTO messages (user_id, time_created, message) VALUES (:user_id, NOW(), :message)"
     db.session.execute(sql, {"user_id": user_id, "message": message})
     db.session.commit()
 
 
 def get_messages():
+    """returns list of tuples containing messages: [0]: id, [1]: username,
+    [2]: message, [3]: timestamp"""
     sql = "SELECT m.id, u.username, m.message, m.time_created FROM messages m " \
           "JOIN users u on m.user_id = u.id " \
           "ORDER BY m.time_created"

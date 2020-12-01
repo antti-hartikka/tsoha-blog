@@ -3,11 +3,8 @@ import re
 from app import db
 
 
-# if username validation is not ok, returns "username not ok"
-# if username already exists, returns "username taken"
-# if password validation is not ok, returns "password not ok"
-# otherwise creates new user into database and returns "ok"
 def create_user(username, password):
+    """Returns "ok" if new user is created, otherwise returns error message string"""
     if not validate_username(username):
         return "username not ok"
     if user_exists(username):
@@ -22,8 +19,9 @@ def create_user(username, password):
     return "ok"
 
 
-# returns true if username matches password in database, returns false if validation returns false or user doesn't exist
 def check_credentials(username, password):
+    """returns true if username matches password in database,
+    returns false if validation returns false or user doesn't exist"""
     if not validate_username(username) or not validate_password(password):
         return False
     sql = "SELECT password " \
@@ -39,8 +37,8 @@ def check_credentials(username, password):
     return False
 
 
-# returns "username not ok" if in incorrect form, "username taken" if username is taken and "ok" if updated
 def set_username(old_name, new_name):
+    """returns ok if username is updated, otherwise returns error message"""
     if not validate_username(new_name):
         return "username not ok"
     if user_exists(new_name):
@@ -53,8 +51,8 @@ def set_username(old_name, new_name):
     return "ok"
 
 
-# returns "bad password" if password validation is not ok, otherwise returns "ok"
 def set_password(username, new_password):
+    """returns "ok" if password is updated, otherwise returns error message"""
     if not validate_password(new_password):
         return "bad password"
     new_password_hash = generate_password_hash(new_password)
@@ -75,6 +73,7 @@ def set_user_group(username, user_group):
 
 
 def get_user_group(username):
+    """Returns user group as a string"""
     sql = "SELECT user_group " \
           "FROM users " \
           "WHERE username=:username"
@@ -94,8 +93,8 @@ def get_user_list():
     return result.fetchall()
 
 
-# Returns true if database contains user
 def user_exists(username):
+    """Returns true if database contains user"""
     sql = "SELECT username " \
           "FROM users " \
           "WHERE username=:username"
@@ -107,8 +106,9 @@ def user_exists(username):
         return True
 
 
-# set user type to basic, set password to "deleted", set username to "[deleted]", set is_active to FALSE
 def delete_account(username):
+    """Sets user type to basic, sets password to "deleted",
+    sets username to "[deleted]", sets is_active to FALSE"""
     set_user_group(username, "basic")
     password = generate_password_hash("deleted")
     set_password(username, password)
@@ -119,8 +119,8 @@ def delete_account(username):
     db.session.commit()
 
 
-# returns -1 if user not found
 def get_user_id(username):
+    """returns -1 if user not found"""
     if not user_exists(username):
         return -1
     sql = "SELECT id " \
@@ -131,15 +131,17 @@ def get_user_id(username):
     return user_id
 
 
-# returns true if username is 3-20 characters long and consists of letters and numbers
 def validate_username(username):
+    """returns true if username is 3-20 characters long
+    and consists of letters and numbers"""
     if re.match(r"^[a-zA-Z0-9]{3,20}$", username):
         return True
     return False
 
 
-# returns true if password is 10-30 characters long and consists of letters and numbers
 def validate_password(password):
+    """returns true if password is 10-30 characters long
+    and consists of letters and numbers"""
     if re.match(r"^[a-zA-Z0-9]{10,30}$", password):
         return True
     return False

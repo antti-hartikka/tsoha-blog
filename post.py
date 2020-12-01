@@ -3,6 +3,7 @@ from app import db
 
 
 def create_new_post(username, title, post_type):
+    """Returns post id"""
     user_id = accounts.get_user_id(username)
     sql = "INSERT INTO posts (user_id, post_type, title, time_created, is_visible)" \
           "VALUES (:user_id, :type, :title, NOW(), TRUE) " \
@@ -14,6 +15,8 @@ def create_new_post(username, title, post_type):
 
 
 def get_posts(post_type):
+    """Returns list of tuples containing posts: [0]: id, [1]: user id, [2]: post type,
+    [3]: title, [4]: timestamp, [5]: visibility"""
     sql = "SELECT * " \
           "FROM posts " \
           "WHERE post_type=:post_type AND is_visible = TRUE " \
@@ -24,6 +27,7 @@ def get_posts(post_type):
 
 
 def get_post(post_id):
+    """Returns tuple containing single post: [0]: title, [1]: timestamp, [2]: username"""
     sql = "SELECT p.title, p.time_created, u.username " \
           "FROM posts p " \
           "JOIN users u on u.id = p.user_id " \

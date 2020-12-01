@@ -24,7 +24,7 @@
 
             <li>
                 {{ comment[2] }} - {{ comment[1] }} <i>({{ comment[0] }})</i>
-                {% if session.user_type == "admin" %}
+                {% if session.user_group == "admin" %}
                     <form action="/story/{{ story_id }}" method="POST">
                         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
                         <input type="hidden" name="comment_id" value="{{ comment[3] }}">
@@ -35,7 +35,7 @@
 
         {% endfor %}
     </ul>
-    {% if session.username and session.user_type != "admin" %}
+    {% if session.username and session.user_group != "admin" %}
         <br>
         <form action="/story/{{ story_id }}" method="POST">
             <textarea class="form-control" rows="3" cols="50" name="comment"></textarea>

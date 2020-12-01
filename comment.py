@@ -3,6 +3,8 @@ from app import db
 
 
 def get_comments(post_id):
+    """Returns list of tuples where [0]: timestamp, [1]: username
+    [2]: comment, [3]: id"""
     sql = "SELECT c.time_created, u.username, c.comment, c.id FROM comments c " \
           "JOIN users u on u.id = c.user_id " \
           "WHERE post_id=:post_id"

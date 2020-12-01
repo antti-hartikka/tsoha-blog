@@ -3,6 +3,7 @@ from app import db
 
 
 def get_image(image_id):
+    """returns response that can be returned straight to requesting object"""
     sql = "SELECT data FROM images WHERE id=:id"
     result = db.session.execute(sql, {"id": image_id})
     data = result.fetchone()[0]
@@ -12,6 +13,7 @@ def get_image(image_id):
 
 
 def add_image(file):
+    """Returns image id if success, returns error message string otherwise"""
     name = file.filename
     if not name.endswith(".jpg") and not name.endswith(".jpeg") and not name.endswith(".png"):
         return "invalid filename"
@@ -28,8 +30,9 @@ def add_image(file):
 
 
 def file_input(file):
+    """returns data if successful, returns error message string otherwise"""
     name = file.filename
-    if not name.endswith(".jpg"):
+    if not name.endswith(".jpg") or not name.endswith(".jpeg"):
         return "Invalid filename"
     data = file.read()
     if len(data) > 500 * 1024:
