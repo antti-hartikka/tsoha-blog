@@ -37,11 +37,11 @@ def get_content(post_id):
 
 
 def get_shorts(post_type):
-    sql = "SELECT i.id, c.media_text FROM posts p " \
+    sql = "SELECT i.id, c.media_text, p.id FROM posts p " \
           "JOIN postcontent pc on p.id = pc.post_id " \
           "JOIN content c on pc.content_id = c.id " \
           "JOIN images i on c.image_id = i.id " \
-          "WHERE p.post_type = :post_type"
+          "WHERE p.post_type = :post_type AND is_visible = TRUE"
     result = db.session.execute(sql, {"post_type": post_type})
     posts = result.fetchall()
     return posts

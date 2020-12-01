@@ -23,17 +23,17 @@ def get_posts(post_type):
     return post_list
 
 
-def get_post(story_id):
+def get_post(post_id):
     sql = "SELECT p.title, p.time_created, u.username " \
           "FROM posts p " \
           "JOIN users u on u.id = p.user_id " \
           "WHERE is_visible = TRUE AND p.id=:id"
-    result = db.session.execute(sql, {"id": story_id})
+    result = db.session.execute(sql, {"id": post_id})
     post = result.fetchone()
     return post
 
 
-def remove_post(story_id):
-    sql = "UPDATE posts SET is_visible = FALSE WHERE id=:story_id"
-    db.session.execute(sql, {"story_id": story_id})
+def remove_post(post_id):
+    sql = "UPDATE posts SET is_visible = FALSE WHERE id=:post_id"
+    db.session.execute(sql, {"post_id": post_id})
     db.session.commit()

@@ -223,20 +223,26 @@ def admintools():
         return redirect("/account/" + user)
 
 
-@app.route("/private")
+@app.route("/private", methods=["GET", "POST"])
 def private():
-    posts = content.get_shorts("private")
-    contents = [[], [], []]
-    count = 0
-    for i in range(3):
-        for j in range(3):
-            if count == len(posts):
-                return render_template("private.html", posts=contents)
-            else:
-                contents[i].append(posts[count])
-                count += 1
-
-    return render_template("private.html", posts=contents)
+    if request.method == "GET":
+        posts = content.get_shorts("private")
+        contents = [[], [], []]
+        count = 0
+        for i in range(3):
+            for j in range(3):
+                if count == len(posts):
+                    return render_template("private.html", posts=contents)
+                else:
+                    contents[i].append(posts[count])
+                    count += 1
+        return render_template("private.html", posts=contents)
+    else:
+        if session["csrf_token"] != request.form["csrf_token"] or session["user_type"] != "admin":
+            return redirect("/logout")
+        post_id = request.form["post_id"]
+        post.remove_post(post_id)
+        return redirect("/")
 
 
 @app.route("/show/<int:image_id>")

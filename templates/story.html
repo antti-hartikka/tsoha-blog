@@ -25,7 +25,7 @@
             <li>
                 {{ comment[2] }} - {{ comment[1] }} <i>({{ comment[0] }})</i>
                 {% if session.user_type == "admin" %}
-                    <form action="/story" method="POST">
+                    <form action="/story/{{ story_id }}" method="POST">
                         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
                         <input type="hidden" name="comment_id" value="{{ comment[3] }}">
                         <input type="submit" class="btn btn-danger btn-sm" value="Poista kommentti">
