@@ -1,40 +1,38 @@
-<nav class="navbar navbar-expand-sm navbar-light bg-light">
-    <a class="navbar-brand" href="/">tsoha-blog</a>
-    <ul class="navbar-nav">
-        <li class="nav-item">
-            <a class="nav-link" href="/">etusivu</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/stories">tarinoita</a>
-        </li>
-        {% if session.user_type == "approved" or session.user_type == "admin" %}
+<div>
+<nav class="navbar navbar-expand-sm navbar-light">
+        <a class="navbar-brand" href="/">tsoha-blog</a>
+        <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link" href="/private">yksityinen</a>
+                <a class="nav-link" href="/">etusivu</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/create_short">luo lyhyt postaus</a>
+                <a class="nav-link" href="/stories">tarinoita</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/create_long">luo pitkä postaus</a>
-            </li>
-        {% endif %}
-         {% if session.user_type %}
-            <li class="nav-item">
-                <a class="nav-link" href="/account/{{ session.username }}">tilisi tiedot</a>
-            </li>
-        {% endif %}
-        {% if session.user_type == "admin" %}
-            <li class="nav-item">
-                <a class="nav-link" href="/admintools">ylläpitäjän työkalut</a>
-            </li>
-        {% endif %}
-        {% if session.user_type %}
-            <li class="nav-item">
-                <a class="nav-link" href="/logout">kirjaudu ulos</a>
-            </li>
-        {% else %}
-            <li class="nav-item">
-            <a class="nav-link" href="/signup">rekisteröidy</a>
-        {% endif %}
-    </ul>
-</nav>
+            {% if session.user_type == "approved" or session.user_type == "admin" %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/private">yksityinen</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/create_short">luo lyhyt postaus</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/create_long">luo pitkä postaus</a>
+                </li>
+            {% endif %}
+            {% if session.user_type %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/account/{{ session.username }}">tilisi tiedot</a>
+                </li>
+            {% endif %}
+            {% if session.user_type == "admin" %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/admintools">ylläpitäjän työkalut</a>
+                </li>
+            {% endif %}
+            {% if not session.user_type %}
+                <li class="nav-item">
+                <a class="nav-link" href="/signup">rekisteröidy</a>
+            {% endif %}
+        </ul>
+    </nav>
+</div>

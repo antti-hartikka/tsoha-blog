@@ -8,9 +8,9 @@
         <p>Tällä sivulla näet itseäsi koskevat tiedot ja voit muuttaa niitä</p>
 
         {% if session.username != username %}
-            <br>
-            <p>!!! Huomaa että olet ylläpitäjä ja toisen käyttäjän sivuilla !!!</p>
-            <br>
+            <div class="alert alert-warning" role="alert">
+                Huomaa että olet ylläpitäjä ja toisen käyttäjän sivuilla
+            </div>
         {% endif %}
 
         <br>
@@ -62,7 +62,7 @@
                 </div>
                 <input type="submit" value="Vaihda käyttäjäryhmää" class="btn btn-primary">
                 <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-            <input type="hidden" name="action" value="update usergroup">
+                <input type="hidden" name="action" value="update usergroup">
             </form>
 
         {% endif %}
@@ -71,7 +71,7 @@
         <form action="/account/{{ username }}" method="POST">
             <input type="submit" value="Poista tili" class="btn btn-danger">
             <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-        <input type="hidden" name="action" value="remove account">
+            <input type="hidden" name="action" value="remove account">
         </form>
     {% else %}
         <p>Sinulla ei ole valtuuksia tälle sivulle tai sivua ei ole olemassa</p>

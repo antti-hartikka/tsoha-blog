@@ -22,15 +22,15 @@
 
         <br>
 
-        <button type="button" onclick="newParagraph()">Lisää tekstikappale</button>
-        <button type="button" onclick="newPicture()">Lisää kuva</button>
+        <button type="button" class="btn btn-primary" onclick="newParagraph()">Lisää tekstikappale</button>
+        <button type="button"class="btn btn-primary" onclick="newPicture()">Lisää kuva</button>
 
         <br>
         <br>
 
         <input type="hidden" name="count" value="0" id="count">
         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-        <input type="submit" value="Luo postaus">
+        <input type="submit" class="btn btn-primary" value="Luo postaus">
 
     </form>
 

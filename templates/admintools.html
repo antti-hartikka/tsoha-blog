@@ -4,27 +4,19 @@
     ylläpitäjän työkalut
 {% endblock %}
 {% block content %}
-
-    <p>Tällä sivulla näet käyttäjiä koskevat tiedot ja voit muuttaa niitä.
-        Valitse ensin käyttäjä alla olevasta listasta:</p>
-
+    <h4><a href="/show_messages">Saapuneet viestit</a></h4>
     <br>
-
+    <h4>Käyttäjien tiedot</h4>
+    <p>Katsoaksesi muiden tietoja valitse ensin käyttäjä alla olevasta listasta:</p>
     <form action="/admintools" method="POST">
         <div class="form-group">
             <label for="query">Käyttäjä:</label>
             <select class="form-control" id="query" name="username">
                 {% for user in users %}
-                <option>{{ user[0] }}</option>
+                    <option>{{ user[0] }}</option>
                 {% endfor %}
             </select>
         </div>
-        <br>
-        <input type="submit" value="Siirry käyttäjän tietoihin">
+        <input type="submit" class="btn btn-primary" value="Siirry käyttäjän tietoihin">
     </form>
-
-    <br>
-
-    <h6><a href="/show_messages">Saapuneet viestit</a></h6>
-
 {% endblock %}}

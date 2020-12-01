@@ -1,12 +1,14 @@
 <!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="../static/custom.css">
 
 <title>tsoha-blog - {% block title %}{% endblock %}</title>
 <div class="container">
     {% include "partials/navbar.html" %}
+    <br>
     {% if session.username %}
-        <p>Olet kirjautunut nimellä {{ session.username }}, käyttäjäryhmäsi on {{ session.user_type }}</p>
+        <p>Olet kirjautunut nimellä {{ session.username }}. <a href="/logout">kirjaudu ulos tästä</a></p>
     {% else %}
         {% include "partials/login.html" %}
     {% endif %}
@@ -22,7 +24,7 @@
     <hr>
     <div class="row">
         <div class="col">
-            Laita viesti asianomaiselle <a href="/message">tästä</a>
+            Laita viesti blogin ylläpitäjälle <a href="/message">tästä</a>
         </div>
     </div>
     <br>
