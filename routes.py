@@ -4,7 +4,7 @@ import post
 from app import app
 from flask import redirect, render_template, request, session
 
-import message
+import messages
 import accounts
 import content
 import os
@@ -249,7 +249,7 @@ def message():
         if len(user_message) > 2000:
             return render_template("message.html", msg="liian pitkä viesti :(")
 
-        message.insert_message(username, user_message)
+        messages.insert_message(username, user_message)
 
         return render_template("message.html", msg="viestin lähetys onnistui")
 

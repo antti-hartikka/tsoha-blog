@@ -69,7 +69,7 @@
 
         <br>
         <form action="/account/{{ username }}" method="POST">
-            <input type="submit" value="Poista tili" class="btn btn-primary">
+            <input type="submit" value="Poista tili" class="btn btn-danger">
             <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         <input type="hidden" name="action" value="remove account">
         </form>
