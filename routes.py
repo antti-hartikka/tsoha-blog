@@ -229,7 +229,7 @@ def private():
         posts = content.get_shorts("private")
         contents = [[], [], []]
         count = 0
-        for i in range(3):
+        for i in range(5):
             for j in range(3):
                 if count == len(posts):
                     return render_template("private.html", posts=contents)
