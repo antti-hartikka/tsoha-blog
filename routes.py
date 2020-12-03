@@ -191,7 +191,7 @@ def login():
         session["csrf_token"] = os.urandom(16).hex()
         return redirect("/")
     else:
-        return render_template("index.html", login="error")
+        return render_template("index.html", msg="väärä käyttäjätunnus tai salasana")
 
 
 @app.route("/logout")
