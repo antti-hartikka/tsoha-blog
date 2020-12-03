@@ -33,8 +33,8 @@ def file_input(file):
     """returns data if successful, returns error message string otherwise"""
     name = file.filename
     if not name.endswith(".jpg") or not name.endswith(".jpeg"):
-        return "Invalid filename"
+        return "tiedosto ei ole .jpg tai .jpeg"
     data = file.read()
     if len(data) > 500 * 1024:
-        return "Too big file"
+        return "tiedosto on liian suuri (max 500 kb)"
     return data

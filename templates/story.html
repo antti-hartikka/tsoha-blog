@@ -38,7 +38,8 @@
     {% if session.username and session.user_group != "admin" %}
         <br>
         <form action="/story/{{ story_id }}" method="POST">
-            <textarea class="form-control" rows="3" cols="50" name="comment"></textarea>
+            <label for="textarea">Lisää kommentti (max 2000 merkkiä)</label>
+            <textarea class="form-control" rows="3" cols="50" name="comment" id="textarea"></textarea>
             <input type="hidden" value="{{ session.csrf_token }}" name="csrf_token">
             <input type="submit" class="btn btn-primary" value="Lähetä kommentti">
         </form>

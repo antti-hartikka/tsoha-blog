@@ -76,6 +76,9 @@ def story(story_id):
             else:
                 username = session["username"]
                 user_comment = request.form["comment"]
+                # if comment is longer than 2000 chars, discard the rest
+                if len(user_comment) > 2000:
+                    user_comment = user_comment[0:2000]
                 comment.insert_comment(username, story_id, user_comment)
         return redirect(f"/story/{story_id}")
 

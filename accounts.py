@@ -40,9 +40,9 @@ def check_credentials(username, password):
 def set_username(old_name, new_name):
     """returns ok if username is updated, otherwise returns error message"""
     if not validate_username(new_name):
-        return "username not ok"
+        return "käyttäjänimi on väärää muotoa"
     if user_exists(new_name):
-        return "username taken"
+        return "käyttäjänimi on jo käytössä"
     sql = "UPDATE users " \
           "SET username=:new " \
           "WHERE username=:old"
@@ -54,7 +54,7 @@ def set_username(old_name, new_name):
 def set_password(username, new_password):
     """returns "ok" if password is updated, otherwise returns error message"""
     if not validate_password(new_password):
-        return "bad password"
+        return "salasana on väärää muotoa"
     new_password_hash = generate_password_hash(new_password)
     sql = "UPDATE users " \
           "SET password=:new_pw " \
