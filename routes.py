@@ -10,6 +10,14 @@ import content
 import os
 
 
+@app.before_request
+def cookie_check():
+    """checks if user has cookie for account that does not exist"""
+    if len(session) != 0:
+        if not accounts.user_exists(session["username"]):
+            return redirect("/logout")
+
+
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "GET":
@@ -126,6 +134,10 @@ def account(username):
             user_group = new_user_group
         if action == "remove account":
             accounts.delete_account(username)
+            if username == session["username"]:
+                del session["username"]
+                del session["user_group"]
+                del session["csrf_token"]
             return render_template("index.html", msg="tietosi on onnistuneesti poistettu")
         return render_template("account.html", msg=result, username=username, user_group=user_group)
 
