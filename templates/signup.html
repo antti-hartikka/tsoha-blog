@@ -8,25 +8,11 @@
         pituuden tulisi olla 3-20 merkkiä. Salasanassa on samanlainen rajoitus, mutta pituuden tulisi olla 10-30
         merkkiä</p>
     <form action="/signup" method="POST">
-        Anna käyttäjänimesi:
+        <label for="username">Anna käyttäjänimesi:</label>
+        <input type="text" name="username" id="username">
         <br>
-        <input type="text" name="username">
-
-        {% if error == "username taken" %}
-            <p>käyttäjänimi on jo käytössä</p>
-        {% elif error == "username not ok" %}
-            <p>käyttäjänimi on vääränmuotoinen</p>
-        {% endif %}
-
-        <br>
-        Anna salasanasi:
-        <br>
-        <input type="password" name="password">
-
-        {% if error == "password not ok" %}
-            <p>salasana on vääränmuotoinen</p>
-        {% endif %}
-
+        <label for="password">Anna salasanasi:</label>
+        <input type="password" name="password" id="password">
         <br>
         <input type="submit" class="btn btn-primary" value="Rekisteröidy">
     </form>

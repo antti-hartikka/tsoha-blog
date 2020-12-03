@@ -97,7 +97,7 @@ def signup():
             session["csrf_token"] = os.urandom(16).hex()
             return redirect("/")
         else:
-            return render_template("signup.html", error=result)
+            return render_template("signup.html", msg=result)
 
 
 @app.route("/account")

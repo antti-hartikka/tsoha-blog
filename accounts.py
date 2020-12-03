@@ -6,11 +6,11 @@ from app import db
 def create_user(username, password):
     """Returns "ok" if new user is created, otherwise returns error message string"""
     if not validate_username(username):
-        return "username not ok"
+        return "käyttäjänimi on väärää muotoa"
     if user_exists(username):
-        return "username taken"
+        return "käyttäjänimi on jo käytössä"
     if not validate_password(password):
-        return "password not ok"
+        return "salasana on väärää muotoa"
     sql = "INSERT INTO users (username, password, user_group, is_active) " \
           "VALUES (:username, :password, 'basic', TRUE)"
     password_hash = generate_password_hash(password)
@@ -134,7 +134,7 @@ def get_user_id(username):
 def validate_username(username):
     """returns true if username is 3-20 characters long
     and consists of letters and numbers"""
-    if re.match(r"^[a-zA-Z0-9]{3,20}$", username):
+    if re.match(r"^[a-zA-Z0-9åäöÅÄÖ]{3,20}$", username):
         return True
     return False
 
