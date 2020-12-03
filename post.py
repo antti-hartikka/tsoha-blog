@@ -41,3 +41,16 @@ def remove_post(post_id):
     sql = "UPDATE posts SET is_visible = FALSE WHERE id=:post_id"
     db.session.execute(sql, {"post_id": post_id})
     db.session.commit()
+
+
+def get_post_type_for_image(image_id):
+    sql = "SELECT p.post_type FROM posts p " \
+          "JOIN postcontent p2 on p.id = p2.post_id " \
+          "JOIN content c on c.id = p2.content_id " \
+          "WHERE c.image_id=:image_id AND p.is_visible = TRUE"
+    result = db.session.execute(sql, {"image_id": image_id})
+    post_type = result.fetchone()
+    if post_type is None:
+        return "nothing"
+    else:
+        return post_type[0]

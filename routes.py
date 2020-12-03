@@ -21,6 +21,7 @@ def cookie_check():
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "GET":
+        # creates matrix for 15 newest images
         posts = content.get_shorts("short")
         contents = [[], [], []]
         count = 0
@@ -33,6 +34,7 @@ def index():
                     count += 1
         return render_template("index.html", posts=contents)
     else:
+        # if admin deletes an image
         if session["csrf_token"] != request.form["csrf_token"] or session["user_group"] != "admin":
             return redirect("/logout")
         post_id = request.form["post_id"]
@@ -43,9 +45,11 @@ def index():
 @app.route("/stories", methods=["GET", "POST"])
 def stories():
     if request.method == "GET":
+        # get stories
         posts = post.get_posts("long")
         return render_template("stories.html", stories=posts)
     else:
+        # if admin deletes a story
         if session["csrf_token"] != request.form["csrf_token"] or session["user_group"] != "admin":
             return redirect("/logout")
         story_id = request.form["story_id"]
@@ -67,6 +71,7 @@ def story(story_id):
             story_id=story_id
         )
     else:
+        # if user comments a story
         if len(session) != 0:
             if session["csrf_token"] != request.form["csrf_token"]:
                 return redirect("/logout")
@@ -102,8 +107,8 @@ def signup():
 
 @app.route("/account")
 def account_noname():
-    if session["username"] is None:
-        redirect("/")
+    if len(session) == 0:
+        return redirect("/")
     return redirect("/account/" + session["username"])
 
 
@@ -115,7 +120,8 @@ def account(username):
     else:
         if session["csrf_token"] != request.form["csrf_token"]:
             return redirect("/logout")
-
+        if session["username"] != username and session["user_group"] != "admin":
+            return redirect("/logout")
         action = request.form["action"]
         result = "ok"
         if action == "update username":
@@ -147,6 +153,10 @@ def account(username):
 
 @app.route("/create_long", methods=["GET", "POST"])
 def create_long():
+    if len(session) == 0:
+        return redirect("/")
+    if session["user_group"] == "basic":
+        return redirect("/")
     if request.method == "GET":
         return render_template("create_long_post.html")
     else:
@@ -204,6 +214,10 @@ def logout():
 
 @app.route("/create_short", methods=["GET", "POST"])
 def create_short():
+    if len(session) == 0:
+        return redirect("/")
+    if session["user_group"] == "basic":
+        return redirect("/")
     if request.method == "GET":
         return render_template("create_short_post.html")
     else:
@@ -228,9 +242,11 @@ def create_short():
 
 @app.route("/admintools", methods=["GET", "POST"])
 def admintools():
+    if len(session) == 0:
+        return redirect("/")
+    if session["user_group"] != "admin":
+        return redirect("/")
     if request.method == "GET":
-        if session["user_group"] != "admin":
-            redirect("/")
         user_list = accounts.get_user_list()
         return render_template("admintools.html", users=user_list)
     else:
@@ -240,6 +256,10 @@ def admintools():
 
 @app.route("/private", methods=["GET", "POST"])
 def private():
+    if len(session) == 0:
+        return redirect("/")
+    if session["user_group"] == "basic":
+        return redirect("/")
     if request.method == "GET":
         posts = content.get_shorts("private")
         contents = [[], [], []]
@@ -262,6 +282,15 @@ def private():
 
 @app.route("/show/<int:image_id>")
 def show(image_id):
+    """checks if user has rights to see image or image is hidden"""
+    post_type = post.get_post_type_for_image(image_id)
+    if post_type == "nothing":
+        return redirect("/")
+    user_group = "basic"
+    if len(session) > 0:
+        user_group = session["user_group"]
+    if post_type == "private" and user_group == "basic":
+        return redirect("/")
     return image.get_image(image_id)
 
 
